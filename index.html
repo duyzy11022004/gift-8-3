@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quà 8-3 cho em 💕</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    overflow:hidden;
+    text-align:center;
+    color:white;
+    background:black;
+}
+
+.container{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:90%;
+    max-width:420px;
+}
+
+.card{
+    background:rgba(255,255,255,0.95);
+    color:#333;
+    padding:25px;
+    border-radius:25px;
+    box-shadow:0 0 40px rgba(255,105,180,0.6);
+    min-height:240px;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    border:none;
+    border-radius:20px;
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#c9184a;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="container">
+<div class="card">
+<h2>🎁 Bé Thương có một món quà nè...</h2>
+<p id="text"></p>
+<button id="nextBtn" onclick="nextStep()">Mở quà 💌</button>
+</div>
+</div>
+
+<script>
+
+const messages=[
+
+`🌷 Chúc mừng 8-3 Em nha 🌷
+
+Hôm nay là ngày của phụ nữ,
+và Anh chỉ muốn chúc Em có một ngày thật nhiều niềm vui,
+nhiều tiếng cười,
+và nhiều điều dễ thương giống như chính Em vậy 😌`,
+
+`Chúc Em luôn xinh đẹp theo cách riêng của mình.
+Không cần phải giống ai cả,
+vì Em đã đủ đặc biệt rồi.
+
+Chúc Em lúc nào cũng tự tin,
+vì khi Em tự tin nhìn đời,
+mọi thứ xung quanh cũng sáng hơn hẳn đó.`,
+
+`Chúc Em luôn gặp may mắn trong học tập,
+deadline tự nhiên nhẹ nhàng hơn,
+áp lực tự nhiên nhỏ lại,
+và những cố gắng của Em luôn được đền đáp xứng đáng 💐`,
+
+`Chúc Em luôn có thật nhiều người thương,
+nhiều người trân trọng,
+và nếu một ngày Em cần ai đó ở bên,
+thì hy vọng người đó đủ tốt để làm Em cười mỗi ngày 😏`,
+
+`Thật ra...
+
+Món quà hôm nay chỉ là một chút lòng thành thôi.
+
+Điều Anh mong nhất,
+là Em luôn vui vẻ,
+luôn hạnh phúc,
+và luôn giữ được nụ cười đó.
+
+Vì với Anh,
+nụ cười đó quý hơn mọi món quà 💕`,
+
+`Tóm lại…
+
+Chúc Em 8/3 thật rực rỡ,
+sớm thoát kiếp FA (nếu Em muốn 😆),
+tiền đầy túi,
+tình đầy tim,
+và mỗi ngày trôi qua đều đáng nhớ hơn ngày hôm qua 🌷`,
+
+`À mà…
+Khi nào làm bạn gái tương lai của anh đây kkk 😆`,
+
+`Chúc mừng ngày 8-3 nha`,
+];
+
+let step=0;
+let typingSpeed=35;
+let isTyping=false;
+
+function typeWriter(text,element){
+    element.innerHTML="";
+    let i=0;
+    isTyping=true;
+    nextBtn.style.display="none";
+
+    function typing(){
+        if(i<text.length){
+            element.innerHTML+=text.charAt(i)==="\n"?"<br>":text.charAt(i);
+            i++;
+            setTimeout(typing,typingSpeed);
+        }else{
+            isTyping=false;
+            nextBtn.style.display="inline-block";
+        }
+    }
+    typing();
+}
+
+function nextStep(){
+    if(isTyping) return;
+
+    if(step < messages.length){
+        typeWriter(messages[step], text);
+        step++;
+
+        if(step===messages.length){
+            setTimeout(startShow,2000);
+        }
+    }
+}
+
+/* CANVAS EFFECT */
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+let hearts=[];
+let flowers=[];
+let phase=0;
+
+function startShow(){
+    heartFirework();
+    setInterval(randomFirework,1000);
+}
+
+function heartFirework(){
+    for(let t=0;t<Math.PI*2;t+=0.1){
+        let x=16*Math.pow(Math.sin(t),3);
+        let y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+        particles.push({
+            x:canvas.width/2 + x*15,
+            y:canvas.height/3 - y*15,
+            dx:(Math.random()-0.5)*2,
+            dy:(Math.random()-0.5)*2,
+            life:120,
+            color:"pink"
+        });
+    }
+    setTimeout(()=>phase=1,2500);
+}
+
+function randomFirework(){
+    let cx=Math.random()*canvas.width;
+    let cy=Math.random()*canvas.height/2;
+    for(let i=0;i<60;i++){
+        particles.push({
+            x:cx,
+            y:cy,
+            dx:(Math.random()-0.5)*6,
+            dy:(Math.random()-0.5)*6,
+            life:100,
+            color:"hsl("+Math.random()*360+",100%,60%)"
+        });
+    }
+}
+
+function createFlower(){
+    flowers.push({
+        x:Math.random()*canvas.width,
+        y:-20,
+        size:Math.random()*8+8,
+        speed:Math.random()*2+1
+    });
+}
+
+function createHeart(){
+    hearts.push({
+        x:Math.random()*canvas.width,
+        y:canvas.height+20,
+        size:Math.random()*20+15,
+        speed:Math.random()*2+1
+    });
+}
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach((p,i)=>{
+        p.x+=p.dx||0;
+        p.y+=p.dy||0;
+        ctx.fillStyle=p.color;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,3,0,Math.PI*2);
+        ctx.fill();
+        p.life--;
+        if(p.life<=0) particles.splice(i,1);
+    });
+
+    if(phase===1){
+        if(Math.random()<0.3) createFlower();
+        flowers.forEach((f,i)=>{
+            ctx.fillStyle="hotpink";
+            ctx.beginPath();
+            ctx.arc(f.x,f.y,f.size,0,Math.PI*2);
+            ctx.fill();
+            f.y+=f.speed;
+            if(f.y>canvas.height) flowers.splice(i,1);
+        });
+        setTimeout(()=>phase=2,5000);
+    }
+
+    if(phase===2){
+        if(Math.random()<0.2) createHeart();
+        hearts.forEach((h,i)=>{
+            ctx.font=h.size+"px Arial";
+            ctx.fillText("💖",h.x,h.y);
+            h.y-=h.speed;
+            if(h.y<-20) hearts.splice(i,1);
+        });
+    }
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>

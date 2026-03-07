@@ -12,7 +12,7 @@ body{
     overflow:hidden;
     text-align:center;
     color:white;
-    background:pink;
+    background:rgb(244, 162, 244);
 }
 
 .container{
@@ -61,9 +61,14 @@ canvas{
 
 <canvas id="canvas"></canvas>
 
+<!-- NHẠC NỀN -->
+<audio id="bgMusic" loop preload="auto">
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <div class="container">
 <div class="card">
-<h2>🎁 Bé Thương có một món quà nè...💕.</h2>
+<h2>🎁 Bé Thương có một món quà nè...</h2>
 <p id="text"></p>
 <button id="nextBtn" onclick="nextStep()">Mở quà 💌</button>
 </div>
@@ -119,26 +124,27 @@ tình đầy tim,
 và mỗi ngày trôi qua đều đáng nhớ hơn ngày hôm qua 🌷`,
 
 `À mà…
-Khi nào làm bạn gái tương lai của Anh đây kkk 😆
-Chủ nhật tới đi ăn mỳ cay với Anh nha Em ơi`,
+Khi nào làm bạn gái tương lai của anh đây kkk 😆`,
 
-`Happy Women's Day 8/3
- Bấm thêm có bất ngờ`,
+`Happy Women's Day 8/3`,
 ];
 
 let step=0;
 let typingSpeed=35;
 let isTyping=false;
 
-function typeWriter(text,element){
+const text=document.getElementById("text");
+const nextBtn=document.getElementById("nextBtn");
+
+function typeWriter(textContent,element){
     element.innerHTML="";
     let i=0;
     isTyping=true;
     nextBtn.style.display="none";
 
     function typing(){
-        if(i<text.length){
-            element.innerHTML+=text.charAt(i)==="\n"?"<br>":text.charAt(i);
+        if(i<textContent.length){
+            element.innerHTML+=textContent.charAt(i)==="\n"?"<br>":textContent.charAt(i);
             i++;
             setTimeout(typing,typingSpeed);
         }else{
@@ -150,6 +156,10 @@ function typeWriter(text,element){
 }
 
 function nextStep(){
+
+    const music=document.getElementById("bgMusic");
+    music.play().catch(()=>{});
+
     if(isTyping) return;
 
     if(step < messages.length){
@@ -272,11 +282,5 @@ animate();
 </script>
 
 </body>
-
 </html>
-
-
-
-
-
-
+```
